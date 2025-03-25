@@ -48,28 +48,26 @@ with st.form("autism_screening_form"):
 
         # Prepare input data for the model
         user_data = {
-            'A1': 1 if answers['A1'] == 'Yes' else 0,
-            'A2': 1 if answers['A2'] == 'Yes' else 0,
-            'A3': 1 if answers['A3'] == 'Yes' else 0,
-            'A4': 1 if answers['A4'] == 'Yes' else 0,
-            'A5': 1 if answers['A5'] == 'Yes' else 0,
-            'A6': 0 if answers['A6'] == 'Yes' else 1, # Reverse for A6
-            'A7': 1 if answers['A7'] == 'Yes' else 0,
-            'A8': 1 if answers['A8'] == 'Yes' else 0,
-            'A9': 1 if answers['A9'] == 'Yes' else 0,
-            'A10': 1 if answers['A10'] == 'Yes' else 0,
+            'A1_Score': 1 if answers['A1'] == 'Yes' else 0,
+            'A2_Score': 1 if answers['A2'] == 'Yes' else 0,
+            'A3_Score': 1 if answers['A3'] == 'Yes' else 0,
+            'A4_Score': 1 if answers['A4'] == 'Yes' else 0,
+            'A5_Score': 1 if answers['A5'] == 'Yes' else 0,
+            'A6_Score': 0 if answers['A6'] == 'Yes' else 1,  # Reverse for A6
+            'A7_Score': 1 if answers['A7'] == 'Yes' else 0,
+            'A8_Score': 1 if answers['A8'] == 'Yes' else 0,
+            'A9_Score': 1 if answers['A9'] == 'Yes' else 0,
+            'A10_Score': 1 if answers['A10'] == 'Yes' else 0,
             'age': age,
-            'gender': gender,
-            'ethnicity': ethnicity
+            'gender_f': 1 if gender == 'Female' else 0,
+            'gender_m': 1 if gender == 'Male' else 0,
+            'gender_o': 1 if gender == 'Other' else 0,
+            'result': aq_score,  # Total AQ score
+            'jaundice_no': 0,  # Default values for jaundice
+            'jaundice_yes': 0,
+            'used_app_before_no': 1  # Default value for app usage
         }
         user_df = pd.DataFrame([user_data])
-
-        # Encode categorical features (assuming your model was trained with encoded features)
-        label_encoders = {}
-        for column in ['gender', 'ethnicity']:
-            le = LabelEncoder()
-            user_df[column] = le.fit_transform(user_df[column])
-            label_encoders[column] = le # Store for potential future use
 
         # Make prediction
         prediction = svc_model.predict(user_df)
