@@ -26,9 +26,8 @@ aq_questions = {
 }
 
 # --- Streamlit App ---
-st.title("Autism Spectrum Screening Tool")
+st.title("✅ Autism :rainbow[Spectrum] Screening Tool")
 st.markdown("Please answer the following questions honestly.")
-st.markdown("*Disclaimer: This is a screening tool, not a medical diagnosis.*")
 
 with st.form("autism_screening_form"):
     st.subheader("Autism Quotient (AQ) Questions")
