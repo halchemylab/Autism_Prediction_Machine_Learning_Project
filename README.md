@@ -89,5 +89,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 🙏 Acknowledgments
 
-- Dataset source: UCI Machine Learning Repository
+- Dataset source: 
+  - UCI Machine Learning Repository
+  - [Kaggle Autism Diagnosis Competition](https://www.kaggle.com/competitions/autismdiagnosis)
 - Autism Society of America for resources and information
