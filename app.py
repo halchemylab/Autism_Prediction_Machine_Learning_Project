@@ -72,22 +72,82 @@ with st.form("autism_screening_form"):
         # Make prediction
         prediction = svc_model.predict(user_df)
 
-        st.subheader("Prediction Result")
-        if prediction[0] == 1:
-            st.warning("Based on your responses, the screening suggests a higher likelihood of autism spectrum traits.")
-        else:
-            st.success("Based on your responses, the screening suggests a lower likelihood of autism spectrum traits.")
-
-        # Optional: Display probability/confidence (if the model has a predict_proba method)
+        # Enhanced Prediction Result Section
+        st.markdown("<h2 style='text-align: center;'>🔍 Screening Results</h2>", unsafe_allow_html=True)
+        
+        # Create three columns for the main result
+        left_col, center_col, right_col = st.columns([1, 2, 1])
+        
+        # Calculate probability if available
+        probability = 0
         if hasattr(svc_model, "predict_proba"):
             probability = svc_model.predict_proba(user_df)[0][1] * 100
-            st.info(f"Probability of autism spectrum traits: {probability:.2f}%")
 
-        # Optional: Show bar chart of AQ score
-        st.subheader("Your Autism Quotient (AQ) Score")
-        st.write(f"Your score: {aq_score} out of 10")
-        chart_data = pd.DataFrame({'Score': [aq_score], 'Max': [10]})
-        st.bar_chart(chart_data[['Score', 'Max']])
+        # Display main prediction result in a colored box
+        with center_col:
+            if prediction[0] == 1:
+                st.markdown("""
+                    <div style='background-color: rgba(255, 190, 190, 0.3); padding: 20px; border-radius: 10px; text-align: center;'>
+                        <h3 style='color: #ff4b4b;'>Higher Likelihood</h3>
+                        <p>of autism spectrum traits detected</p>
+                        <h1 style='font-size: 48px;'>🔔</h1>
+                    </div>
+                """, unsafe_allow_html=True)
+            else:
+                st.markdown("""
+                    <div style='background-color: rgba(190, 255, 190, 0.3); padding: 20px; border-radius: 10px; text-align: center;'>
+                        <h3 style='color: #00cc00;'>Lower Likelihood</h3>
+                        <p>of autism spectrum traits detected</p>
+                        <h1 style='font-size: 48px;'>✓</h1>
+                    </div>
+                """, unsafe_allow_html=True)
+
+        # Show probability gauge if available
+        if hasattr(svc_model, "predict_proba"):
+            st.markdown("<br>", unsafe_allow_html=True)
+            prob_cols = st.columns([1, 3, 1])
+            with prob_cols[1]:
+                st.markdown(f"""
+                    <div style='background-color: rgba(230, 230, 230, 0.3); padding: 20px; border-radius: 10px; text-align: center;'>
+                        <h4>Probability Indicator</h4>
+                        <div style='margin: 10px 0;'>
+                            <div style='background-color: #e6e6e6; border-radius: 10px; height: 20px;'>
+                                <div style='background-color: {"#ff4b4b" if probability > 50 else "#00cc00"}; 
+                                          width: {probability}%; height: 100%; border-radius: 10px;'></div>
+                            </div>
+                        </div>
+                        <p style='font-size: 24px; margin: 10px;'>{probability:.1f}%</p>
+                    </div>
+                """, unsafe_allow_html=True)
+
+        # Display AQ Score in an enhanced format
+        st.markdown("<br>", unsafe_allow_html=True)
+        score_cols = st.columns([1, 2, 1])
+        with score_cols[1]:
+            st.markdown(f"""
+                <div style='background-color: rgba(230, 230, 230, 0.3); padding: 20px; border-radius: 10px; text-align: center;'>
+                    <h4>Autism Quotient (AQ) Score</h4>
+                    <h2 style='font-size: 36px; margin: 10px;'>{aq_score}/10</h2>
+                    <div style='background-color: #e6e6e6; border-radius: 10px; height: 20px;'>
+                        <div style='background-color: #3366ff; width: {(aq_score/10)*100}%; height: 100%; border-radius: 10px;'></div>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+
+        # Add score interpretation guide
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("""
+            <div style='background-color: rgba(230, 230, 230, 0.2); padding: 15px; border-radius: 10px;'>
+                <h4 style='text-align: center;'>Score Interpretation Guide</h4>
+                <ul style='list-style-type: none;'>
+                    <li>🟢 0-3: Lower likelihood of autism traits</li>
+                    <li>🟡 4-6: Moderate presence of autism traits</li>
+                    <li>🔴 7-10: Higher likelihood of autism traits</li>
+                </ul>
+            </div>
+        """, unsafe_allow_html=True)
+
+        st.markdown("<br>", unsafe_allow_html=True)
 
 st.markdown("---")
 st.info("""
