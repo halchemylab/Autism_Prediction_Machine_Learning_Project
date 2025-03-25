@@ -71,6 +71,9 @@ with st.form("autism_screening_form"):
 
         # Make prediction
         prediction = svc_model.predict(user_df)
+        
+        # Update prediction based on AQ score as well
+        is_high_risk = prediction[0] == 1 or aq_score >= 7  # Consider both model prediction and high AQ score
 
         # Enhanced Prediction Result Section
         st.markdown("<h2 style='text-align: center;'>🔍 Screening Results</h2>", unsafe_allow_html=True)
@@ -85,7 +88,7 @@ with st.form("autism_screening_form"):
 
         # Display main prediction result in a colored box
         with center_col:
-            if prediction[0] == 1:
+            if is_high_risk:
                 st.markdown("""
                     <div style='background-color: rgba(255, 190, 190, 0.3); padding: 20px; border-radius: 10px; text-align: center;'>
                         <h3 style='color: #ff4b4b;'>Higher Likelihood</h3>
