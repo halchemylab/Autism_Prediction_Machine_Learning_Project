@@ -33,7 +33,7 @@ with st.form("autism_screening_form"):
     st.subheader("Autism Quotient (AQ) Questions")
     answers = {}
     for key, question in aq_questions.items():
-        answers[key] = st.radio(question, options=['Yes', 'No'], index=1) # Default to No
+        answers[key] = st.radio(question, options=['Yes', 'No'], key=key, index=None)
 
     st.subheader("Additional Information")
     age = st.number_input("Age", min_value=0, step=1)
